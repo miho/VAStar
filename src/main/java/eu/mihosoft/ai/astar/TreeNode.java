@@ -21,7 +21,8 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
     private final State<T> state;
     public int ID;
     private final double heuristic;
-    private int costs;
+    private int distanceToRoot;
+    private double costs;
     private double sum;
     private static int nodeCount = 0;
 
@@ -40,6 +41,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
         this.state = (State) s.clone();
         this.heuristic = heuristic;
         this.costs = 0;
+        this.distanceToRoot = 0;
         this.sum = heuristic + costs;
 
         nodeCount++;
@@ -52,9 +54,11 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      *
      * @param t Child node.
      */
+    @Override
     public boolean add(TreeNode<T> t) {
         t.leafes = this.leafes;
-        t.costs = this.getCosts() + 1;
+        t.costs = this.getCosts() + t.getState().getAction().getCosts();
+        t.distanceToRoot = this.getDistanceToRoot()+1;
         t.sum = t.costs + t.heuristic;
         t.parent = this;
 
@@ -129,7 +133,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
     /**
      * Returns costs of the TreeNode.
      */
-    public int getCosts() {
+    public double getCosts() {
         return costs;
     }
 
@@ -186,5 +190,12 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      */
     public int getNodeCount() {
         return nodeCount;
+    }
+
+    /**
+     * @return the distanceToRoot
+     */
+    public int getDistanceToRoot() {
+        return distanceToRoot;
     }
 }

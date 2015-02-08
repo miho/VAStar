@@ -16,6 +16,7 @@ import java.util.Objects;
 public class BooleanState implements State<Boolean> {
     private String actionName;
     private final List<Boolean> internalState;
+    private Action action;
     
     /**
      * Creates an instance of State.
@@ -78,6 +79,8 @@ public class BooleanState implements State<Boolean> {
         
         newState.internalState.clear();
         newState.internalState.addAll(internalState);
+        newState.action = action;
+        newState.actionName = actionName;
         
         return newState;
     }
@@ -100,5 +103,15 @@ public class BooleanState implements State<Boolean> {
     @Override
     public State<Boolean> newInstance(int n) {
         return new BooleanState(n);
+    }
+
+    @Override
+    public Action<Boolean> getAction() {
+        return action;
+    }
+
+    @Override
+    public void setAction(Action<Boolean> a) {
+        this.action = a;
     }
 }

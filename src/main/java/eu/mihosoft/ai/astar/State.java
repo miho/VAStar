@@ -22,6 +22,9 @@ import java.util.Objects;
 public interface State<T>
 {
 
+    public Action<T> getAction();
+    
+    public void setAction(Action<T> a);
     
     /**
      * Returns the name of the action that last changed the state.

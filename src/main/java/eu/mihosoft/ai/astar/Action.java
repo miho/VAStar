@@ -20,6 +20,7 @@ public class Action<T> {
     private String name;
     public Condition<T> precond;
     public Effect<T> effect;
+    private double costs = 1.0;
 
     /**
      * Creates a new instance of Action
@@ -42,6 +43,7 @@ public class Action<T> {
         if (performable) {
             effect.apply(s);
             s.setActionName(this.getName());
+            s.setAction(this);
         } else {
 //            System.out.println ("in Action: " + getName ());
         }
@@ -64,6 +66,7 @@ public class Action<T> {
         if (performable) {
             effect.apply(s2);
             s2.setActionName(this.getName());
+            s2.setAction(this);
         } else {
 //            System.out.println ("in Action: " + getName ());
         }
@@ -123,5 +126,13 @@ public class Action<T> {
      */
     protected void setName(String name) {
         this.name = name;
+    }
+    
+    public double getCosts() {
+        return costs;
+    }
+    
+    public void setCosts(double costs) {
+        this.costs = costs;
     }
 }

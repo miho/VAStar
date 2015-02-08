@@ -1,6 +1,7 @@
 package eu.mihosoft.ai.astar;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
@@ -10,11 +11,27 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        GoInDirAction left = new GoInDirAction(new XY(-1, 0), "left");
-        GoInDirAction right = new GoInDirAction(new XY(1, 0), "right");
+        List<XY> obstacles = new ArrayList<>();
 
-        GoInDirAction up = new GoInDirAction(new XY(0, -1), "up");
-        GoInDirAction down = new GoInDirAction(new XY(0, 1), "down");
+        obstacles.add(new XY(2, -3));
+        obstacles.add(new XY(2, -2));
+        obstacles.add(new XY(2, -1));
+        obstacles.add(new XY(2, 0));
+        obstacles.add(new XY(2, 1));
+        obstacles.add(new XY(2, 2));
+        obstacles.add(new XY(2, 3));
+        obstacles.add(new XY(2, 4));
+        obstacles.add(new XY(2, 5));
+
+        obstacles.add(new XY(5, 3));
+        obstacles.add(new XY(5, 4));
+        obstacles.add(new XY(5, 5));
+        obstacles.add(new XY(5, 6));
+
+        GoInDirAction left = new GoInDirAction(new XY(-1, 0), "left", obstacles);
+        GoInDirAction right = new GoInDirAction(new XY(1, 0), "right", obstacles);
+        GoInDirAction up = new GoInDirAction(new XY(0, -1), "up", obstacles);
+        GoInDirAction down = new GoInDirAction(new XY(0, 1), "down", obstacles);
 
         ArrayList<Action> actions = new ArrayList<>();
 
@@ -54,7 +71,7 @@ class XY {
         this.x = xy.x;
         this.y = xy.y;
     }
-    
+
     @Override
     public String toString() {
         return "x: " + x + ", y: " + y;
@@ -85,13 +102,13 @@ class XY {
         }
         return true;
     }
-    
-    
+
 }
 
 class XYState implements State<XY> {
 
     private String actionName;
+    private Action<XY> action;
 
     private XY pos;
 
@@ -115,10 +132,11 @@ class XYState implements State<XY> {
 
     @Override
     public State clone() {
-        XYState result =  new XYState(pos);
-        
+        XYState result = new XYState(pos);
+
         result.setActionName(actionName);
-        
+        result.setAction(action);
+
         return result;
     }
 
@@ -158,7 +176,7 @@ class XYState implements State<XY> {
 
         return new XYState();
     }
-    
+
     @Override
     public String toString() {
         return "pos: " + pos.toString();
@@ -185,13 +203,36 @@ class XYState implements State<XY> {
         }
         return true;
     }
-    
-    
+
+    @Override
+    public Action<XY> getAction() {
+        return this.action;
+    }
+
+    @Override
+    public void setAction(Action<XY> a) {
+        this.action = a;
+    }
 }
 
 class GoInDirAction extends Action {
 
     private XY direction;
+    private List<XY> obstacles = new ArrayList<>();
+
+    public boolean verify(State<XY> s) {
+
+        s = s.clone();
+
+        effect.apply(s);
+
+        return precond.verify(s);
+    }
+
+    public GoInDirAction(XY direction, String name, List<XY> obstacles) {
+        this(direction, name);
+        setObstacles(obstacles);
+    }
 
     public GoInDirAction(XY direction, String name) {
 
@@ -205,16 +246,18 @@ class GoInDirAction extends Action {
             public boolean verify(State<XY> s) {
 
                 s = s.clone();
-                
+
                 s.get(0).x += GoInDirAction.this.direction.x;
                 s.get(0).y += GoInDirAction.this.direction.y;
-                
+
                 XY pos = s.get(0);
 
-                if (pos.x >= 2 && pos.x < 3 && pos.y >= 0 && pos.y <=5) {
-                    return false;
+                for (XY xy : getObstacles()) {
+                    if (xy.equals(s.get(0))) {
+                        return false;
+                    }
                 }
-                
+
                 return true;
 
             }
@@ -224,7 +267,6 @@ class GoInDirAction extends Action {
                 return name;
             }
         });
-
         effect.add(new EffectPredicate<XY>() {
 
             @Override
@@ -239,6 +281,21 @@ class GoInDirAction extends Action {
             }
         });
     } // end constructor
+
+    /**
+     * @return the obstacles
+     */
+    public List<XY> getObstacles() {
+        return obstacles;
+    }
+
+    /**
+     * @param obstacles the obstacles to set
+     */
+    public final void setObstacles(List<XY> obstacles) {
+        this.obstacles.clear();
+        this.obstacles.addAll(obstacles);
+    }
 
 }  // end go in dir
 
@@ -275,7 +332,7 @@ class PositionPredicate implements ConditionPredicate<XY>, EffectPredicate<XY> {
                 && Math.abs(pos.y - s.get(0).y) < 0.001;
 //        
 //        System.out.println("pos: " + pos + " -> state-pos: " + s.get(0) + ", result: " + result);
-        
+
         return result;
     }
 
@@ -292,6 +349,10 @@ class PositionPredicate implements ConditionPredicate<XY>, EffectPredicate<XY> {
 
 class ManhattanHeuristic implements Heuristic<XY> {
 
+    public ManhattanHeuristic() {
+        //
+    }
+
     @Override
     public double estimate(State<XY> s, Condition<XY> goal, WorldDescription<XY> w) {
         XY pos = s.get(0);
@@ -306,7 +367,7 @@ class ManhattanHeuristic implements Heuristic<XY> {
 
         double dx = Math.abs(pos.x - goalPos.x);
         double dy = Math.abs(pos.y - goalPos.y);
-        
+
         return minCostsPerNode * (dx + dy);
     }
 

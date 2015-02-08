@@ -37,7 +37,7 @@ public class AStar<T> {
         System.out.println(">> A-Star initialized!");
         System.out.println("");
         System.out.println("------------------------------");
-        System.out.println ("[ state length : " + w.getInitialState ().size () + " ]");
+        System.out.println("[ state length : " + w.getInitialState().size() + " ]");
         System.out.println("[ number of actions: " + w.getActionSet().size() + " ]");
         System.out.println("[ initial distance: " + root.getHeuristic() + " ]");
         System.out.println("------------------------------");
@@ -57,7 +57,7 @@ public class AStar<T> {
         TreeNode<T> bestNode = null;
         double heuristic = root.getHeuristic();
 //        double minHeuristic = heuristic;
-        
+
         boolean accepted = false;
 
 //        HelpfulActions actionFilter = new HelpfulActions(w.getInitialState (),w);
@@ -70,7 +70,6 @@ public class AStar<T> {
                 t = getLeafWithLowestSum(root);
 
 //                System.out.println("min: " + t.getState() + ", h: " + t.getHeuristic());
-
                 for (Action a : w.getActionSet()) {
 
                     State<T> sNew = t.getState().clone();
@@ -78,10 +77,9 @@ public class AStar<T> {
                     boolean performable = a.perform(sNew, sNew);
 
 //                    System.out.println("s: " + sNew + ", performable: " + performable + ", a: " + a.getName());
-//                    if (!performable) {
+                    if (!performable) {
 //                        System.out.println(" --> rejecting s: " + sNew + ", h: " + heuristic + ", a: " + a.getName());
-//                    }
-
+                    }
                     if (performable) //                    if (actionFilter.verifyAction (sNew,a))
                     {
 
@@ -90,12 +88,11 @@ public class AStar<T> {
 //                        System.out.println(" --> adding s: " + sNew + ", h: " + heuristic + ", a: " + a.getName());
                         t.add(new TreeNode(sNew, heuristic));
 
-//                        if ( t.getCosts () > maxDepth)
-//                        {
-//                            maxDepth = t.getCosts();
-//                            System.out.println("[ path depth: " + maxDepth + " ]");
-//                        }
-                        
+                        if (t.getDistanceToRoot()> maxDepth) {
+                            maxDepth = t.getDistanceToRoot();
+                            System.out.println("[ path depth: " + maxDepth + " ]");
+                        }
+
                         accepted = w.getGoal().verify(sNew);
 
                         if (accepted) {
@@ -117,15 +114,16 @@ public class AStar<T> {
             // find out last added node
             t = t.get(t.size() - 1);
 
-            solution = new String[t.getCosts()];
+            solution = new String[t.getDistanceToRoot()];
 
             while (t.getParent() != null) {
-                for (int i = t.getCosts() - 1; i >= 0; i--) {
+                for (int i = t.getDistanceToRoot() - 1; i >= 0; i--) {
                     solution[i] = t.getState().getActionName();
                     t = t.getParent();
                 }
             }
 
+            System.out.println("");
             System.out.println(">> Solution found! ");
 
             System.out.println("");
