@@ -14,18 +14,13 @@ package eu.mihosoft.ai.astar;
  * that is interpreted as condition.
  * @author miho
  */
-public interface ConditionPredicate
+public interface ConditionPredicate<T>
 {
     /**
      * Verifies if ConditionPredicates are true in State s.
      * @param s State
      */
-    public boolean verify(State s);
-    
-    /**
-     * Returns predicate value, i.e. if predicate is negated or not.
-     */
-    public boolean getPredicateValue();
+    public boolean verify(State<T> s);
     
     /**
      * Returnes the name of the predicate as String.

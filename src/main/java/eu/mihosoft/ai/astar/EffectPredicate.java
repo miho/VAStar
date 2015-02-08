@@ -14,7 +14,7 @@ package eu.mihosoft.ai.astar;
  * that is interpreted as effect.
  * @author miho
  */
-public interface EffectPredicate
+public interface EffectPredicate<T>
 {   
      
     /**
@@ -22,15 +22,12 @@ public interface EffectPredicate
      *
      * @param s State
      */
-     public void apply(State s);
+     public void apply(State<T> s);
      
-    /**
-     * Returns predicate value, i.e. if predicate is negated or not.
-     */
-    public boolean getPredicateValue();
     
     /**
      * Returnes the name of the predicate as String.
+     * @return 
      */
     public String getName();
 }

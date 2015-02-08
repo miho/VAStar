@@ -13,10 +13,10 @@ package eu.mihosoft.ai.astar;
  * Heuristic is used to estimate distance between states.
  * @author night
  */
-public interface Heuristic
+public interface Heuristic<T>
 {
     /**
      *	compare two states and return the difference
      */
-    public int estimate(State s, WorldDescription w);
+    public double estimate(State<T> s, Condition<T> goal, WorldDescription<T> w);
 }

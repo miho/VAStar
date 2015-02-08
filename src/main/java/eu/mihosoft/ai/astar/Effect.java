@@ -17,37 +17,37 @@ import java.util.ArrayList;
  * as OR. All predicates are combined via AND.
  * @author miho
  */
-public class Effect extends ArrayList<EffectPredicate>
+public class Effect<T> extends ArrayList<EffectPredicate<T>>
 {
     
     /**
      * Applies all effect predicates to state s.
      * @param s State
      */
-    public void apply (State s)
+    public void apply (State<T> s)
     {
-        for (EffectPredicate i : this)
+        for (EffectPredicate<T> i : this)
         {
             i.apply (s);
         }
     }
     
-    /**
-     * Overloaded version of the above named method.
-     * It gives you the choice to only apply positive
-     * or negative effects.
-     * @param s State
-     * @param predicateValue defines whether only positive
-     *                       or negative effects will be applied.
-     */
-    public void apply (State s, boolean predicateValue)
-    {
-        for (EffectPredicate i : this)
-        {
-            if (i.getPredicateValue () == predicateValue)
-            {
-                i.apply (s);
-            }
-        }
-    }
+//    /**
+//     * Overloaded version of the above named method.
+//     * It gives you the choice to only apply positive
+//     * or negative effects.
+//     * @param s State
+//     * @param predicateValue defines whether only positive
+//     *                       or negative effects will be applied.
+//     */
+//    public void apply (State s, boolean predicateValue)
+//    {
+//        for (EffectPredicate i : this)
+//        {
+//            if (i.getPredicateValue () == predicateValue)
+//            {
+//                i.apply (s);
+//            }
+//        }
+//    }
 }
