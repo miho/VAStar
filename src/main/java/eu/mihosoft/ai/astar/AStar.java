@@ -9,6 +9,7 @@
 package eu.mihosoft.ai.astar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The AStar class contains an implementation of the well known A* algorithm. It
@@ -20,7 +21,7 @@ public class AStar<T> {
 
     private WorldDescription<T> w;
     private TreeNode<T> root;
-    private String[] solution;
+    private Action[] solution;
 
     /**
      * Creates a new instance of AStar
@@ -114,14 +115,16 @@ public class AStar<T> {
             // find out last added node
             t = t.get(t.size() - 1);
 
-            solution = new String[t.getDistanceToRoot()];
+            solution = new Action[t.getDistanceToRoot()];
+            
 
             while (t.getParent() != null) {
                 for (int i = t.getDistanceToRoot() - 1; i >= 0; i--) {
-                    solution[i] = t.getState().getActionName();
+                    solution[i]=t.getState().getAction();
                     t = t.getParent();
                 }
             }
+
 
             System.out.println("");
             System.out.println(">> Solution found! ");
@@ -135,7 +138,7 @@ public class AStar<T> {
             System.out.println("");
 
             for (int i = 0; i < solution.length; i++) {
-                System.out.println("[ " + i + " ]  " + solution[i]);
+                System.out.println("[ " + i + " ]  " + solution[i].getName());
             }
 
             System.out.println("");
@@ -174,6 +177,7 @@ public class AStar<T> {
     /**
      * This optimization method is used for hill climbing. It is not in use in
      * the final version as this was just a test.
+     * @param t
      */
     public void optimizeTree(TreeNode<T> t) {
         ArrayList<TreeNode<T>> delList = new ArrayList<>();
@@ -192,8 +196,9 @@ public class AStar<T> {
 
     /**
      * Returns the solution as String array.
+     * @return 
      */
-    public String[] getSolution() {
+    public Action[] getSolution() {
         return solution;
     }
 }

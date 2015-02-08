@@ -18,6 +18,8 @@ public class Main {
 
         List<XY> obstacles = new ArrayList<>();
 
+        obstacles.add(new XY(2, -5));
+        obstacles.add(new XY(2, -4));
         obstacles.add(new XY(2, -3));
         obstacles.add(new XY(2, -2));
         obstacles.add(new XY(2, -1));
