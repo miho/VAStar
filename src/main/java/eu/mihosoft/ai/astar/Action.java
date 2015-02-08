@@ -20,7 +20,7 @@ public class Action<T> {
     private String name;
     public Condition<T> precond;
     public Effect<T> effect;
-    private double costs = 1.0;
+    private final double costs = 1.0;
 
     /**
      * Creates a new instance of Action
@@ -128,11 +128,8 @@ public class Action<T> {
         this.name = name;
     }
     
-    public double getCosts() {
+    public double getCosts(State<T> s) {
         return costs;
     }
-    
-    public void setCosts(double costs) {
-        this.costs = costs;
-    }
+
 }

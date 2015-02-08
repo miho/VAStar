@@ -57,7 +57,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
     @Override
     public boolean add(TreeNode<T> t) {
         t.leafes = this.leafes;
-        t.costs = this.getCosts() + t.getState().getAction().getCosts();
+        t.costs = this.getCosts() + t.getState().getAction().getCosts(t.getState());
         t.distanceToRoot = this.getDistanceToRoot()+1;
         t.sum = t.costs + t.heuristic;
         t.parent = this;
