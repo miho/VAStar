@@ -10,10 +10,10 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 install:
-    - TERM=dumb sh ./gradlew --refresh-dependencies --stacktrace
+    - TERM=dumb bash ./gradlew --refresh-dependencies --stacktrace
 
 script:
-    - TERM=dumb sh ./gradlew build --stacktrace
+    - TERM=dumb bash ./gradlew build --stacktrace
 
 after_failure:
   - "cat ./build/test-results/*.xml"
