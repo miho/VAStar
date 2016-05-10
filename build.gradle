@@ -46,6 +46,18 @@ licenseTest {
     source -= sourceSets.test.resources
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'eu.mihosoft.ai.astar'
+            artifactId 'astar'
+            version '0.0.1'
+
+            from components.java
+        }
+    }
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -100,7 +112,7 @@ jar {
 
 
 def pomConfig = {
-    name 'jcsg'
+    name 'vastar'
     description 'Generic A-Star Implementation. Supports custom problem domains.'
     url 'https://github.com/miho/VAStar'
     inceptionYear '2016'
