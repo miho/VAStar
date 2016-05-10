@@ -1,4 +1,21 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.+'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'net.nemerosa.versioning' version '1.7.1'
+    id 'com.jfrog.bintray' version '1.6'
+    id "com.github.hierynomus.license" version "0.12.1"
+}
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -10,4 +27,136 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+license {
+    header = rootProject.file('config/HEADER')
+    strictCheck = true
+    ignoreFailures = true
+    mapping {
+        java   = 'SLASHSTAR_STYLE'
+        groovy = 'SLASHSTAR_STYLE'
+        fxml   = 'XML_STYLE'
+    }
+    ext.year   = '2007-2016'
+    ext.author = 'Michael Hoffer <info@michaelhoffer.de>'
+}
+
+licenseTest {
+    source -= sourceSets.test.resources
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// create one jar for the source files
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new java.text.SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new java.text.SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+// create a fat-jar (class files plus dependencies
+// excludes VRL.jar (plugin jar files must not start with 'vrl-\\d+')
+jar {
+
+    // TODO add switch for fat-jar generation
+    // dependencies except VRL
+    // from configurations.runtime.asFileTree.
+    //     filter({file->return !file.name.startsWith("vrl-0")}).
+    //     files.collect { zipTree(it) }
+    // 
+    // // project class files compiled from source
+    // from files(sourceSets.main.output)
+    
+    manifest {
+    
+        attributes(
+          'Built-By': System.properties['user.name'],
+          'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+          'Build-Date': project.buildDate,
+          'Build-Time': project.buildTime,
+          'Build-Revision': versioning.info.commit,
+          'Specification-Title': project.name,
+          'Specification-Version': project.version,
+          'Implementation-Title': project.name,
+          'Implementation-Version': project.version
+        )
+    }
+}
+
+
+def pomConfig = {
+    name 'jcsg'
+    description 'Generic A-Star Implementation. Supports custom problem domains.'
+    url 'https://github.com/miho/VAStar'
+    inceptionYear '2016'
+    licenses {
+        license([:]) {
+            name 'BSD 2-Clause'
+            url 'https://github.com/miho/VAStar/blob/master/LICENSE.txt'
+            distribution 'repo'
+        }
+    }
+    scm {
+        url 'scm:git@github.com:miho/VAStar.git'
+        connection 'scm:git@github.com:miho/VAStar.git'
+        developerConnection 'scm:git@github.com:miho/VAStar.git'
+    }
+    developers {
+        developer {
+            id 'miho'
+            name 'Michael Hoffer'
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode 'description', 'Generic A-Star Implementation. Supports custom problem domains.'
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
+if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
+
+bintray {
+    user = project.bintrayUsername
+    key = project.bintrayApiKey
+    publications = ['mavenCustom']
+    pkg {
+        repo                  = 'VAStar'
+        userOrg               = 'miho'
+        name                  = project.name
+        desc                  = 'Generic A-Star Implementation. Supports custom problem domains.'
+        licenses              = ['BSD 2-Clause']
+        labels                = ['ai', 'java',  'a-star']
+        websiteUrl            = 'https://github.com/miho/VAStar'
+        issueTrackerUrl       = 'https://github.com/miho/VAStar/issues'
+        vcsUrl                = 'git@github.com:miho/VAStar.git'
+        publicDownloadNumbers = true
+    }
 }
