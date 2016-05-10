@@ -17,6 +17,10 @@ plugins {
     id "com.github.hierynomus.license" version "0.12.1"
 }
 
+task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper to the current directory.') {
+    gradleVersion = '2.13'
+}
+
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint:unchecked']
