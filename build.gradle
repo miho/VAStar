@@ -46,18 +46,6 @@ licenseTest {
     source -= sourceSets.test.resources
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'eu.mihosoft.ai.astar'
-            artifactId 'astar'
-            version '0.0.1'
-
-            from components.java
-        }
-    }
-}
-
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -139,6 +127,11 @@ def pomConfig = {
 publishing {
     publications {
         mavenCustom(MavenPublication) {
+            
+            groupId 'eu.mihosoft.ai.astar'
+            artifactId 'astar'
+            version '0.0.1'
+            
             from components.java
             artifact sourcesJar
             artifact javadocJar
