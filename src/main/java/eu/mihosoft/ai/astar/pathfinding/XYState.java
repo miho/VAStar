@@ -39,7 +39,7 @@ public class XYState implements State<XY> {
     }
 
     @Override
-    public State clone() {
+    public State<XY> clone() {
         XYState result = new XYState(pos);
 
         result.setActionName(actionName);
@@ -106,10 +106,8 @@ public class XYState implements State<XY> {
             return false;
         }
         final XYState other = (XYState) obj;
-        if (!Objects.equals(this.pos, other.pos)) {
-            return false;
-        }
-        return true;
+        
+        return Objects.equals(this.pos, other.pos);
     }
 
     @Override

@@ -11,7 +11,7 @@ import eu.mihosoft.ai.astar.Condition;
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-public class PositionGoal extends Condition {
+public class PositionGoal extends Condition<XY> {
 
     private final XY pos;
 

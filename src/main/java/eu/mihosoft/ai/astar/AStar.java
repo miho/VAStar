@@ -49,6 +49,9 @@ public class AStar<T> {
      * starts the planning process.
      */
     public void run() {
+        
+        solution = null;
+        
         System.out.println(">> Running:");
         System.out.println("");
 //        boolean foundSolution = false;
@@ -71,7 +74,7 @@ public class AStar<T> {
                 t = getLeafWithLowestSum(root);
 
 //                System.out.println("min: " + t.getState() + ", h: " + t.getHeuristic());
-                for (Action a : w.getActionSet()) {
+                for (Action<T> a : w.getActionSet()) {
 
                     State<T> sNew = t.getState().clone();
 
@@ -87,7 +90,7 @@ public class AStar<T> {
                         heuristic = w.getHeuristic().estimate(sNew, w.getGoal(), w);
 
 //                        System.out.println(" --> adding s: " + sNew + ", h: " + heuristic + ", a: " + a.getName());
-                        t.add(new TreeNode(sNew, heuristic));
+                        t.add(new TreeNode<T>(sNew, heuristic));
 
                         if (t.getDistanceToRoot()> maxDepth) {
                             maxDepth = t.getDistanceToRoot();
@@ -147,6 +150,8 @@ public class AStar<T> {
 
         } //endif (heuristic > 0)
         else {
+            solution = new Action[0];
+            
             System.out.println("[ goal reached in initial state! ]");
             System.out.println("");
             System.out.println("------------------------------");
@@ -163,7 +168,7 @@ public class AStar<T> {
      */
     private TreeNode<T> getLeafWithLowestSum(TreeNode<T> node) {
         double sum = Integer.MAX_VALUE;
-        TreeNode min = null;
+        TreeNode<T> min = null;
 
         for (TreeNode<T> t : node.getLeafes()) {
             if (t.getSum() < sum) {
@@ -195,8 +200,8 @@ public class AStar<T> {
     }
 
     /**
-     * Returns the solution as String array.
-     * @return 
+     * Returns the solution.
+     * @return the solution or <code>null</code> if no solution has been found.
      */
     public Action[] getSolution() {
         return solution;

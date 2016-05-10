@@ -60,34 +60,34 @@ public class Main {
         GoInDirAction rightDown = new GoInDirAction(new XY(1, 1), "down-right", obstacles, costs);
         GoInDirAction leftDown = new GoInDirAction(new XY(-1, 1), "down-left", obstacles, costs);
 
-        ArrayList<Action> squareActions = new ArrayList<>();
+        ArrayList<Action<XY>> squareActions = new ArrayList<>();
 
         squareActions.add(left);
         squareActions.add(right);
         squareActions.add(up);
         squareActions.add(down);
 
-        ArrayList<Action> squareAndDiagonal = new ArrayList<>(squareActions);
+        ArrayList<Action<XY>> squareAndDiagonal = new ArrayList<>(squareActions);
 
         squareAndDiagonal.add(upLeft);
         squareAndDiagonal.add(upRight);
         squareAndDiagonal.add(rightDown);
         squareAndDiagonal.add(leftDown);
 
-        WorldDescription w = new WorldDescription(
+        WorldDescription<XY> w = new WorldDescription<>(
                 new XYState(new XY(0, 1)),
                 new PositionGoal(new XY(8, 4)),
                 squareActions, new ManhattanHeuristic());
 
-        WorldDescription w2 = new WorldDescription(
+        WorldDescription<XY> w2 = new WorldDescription<>(
                 new XYState(new XY(0, 1)),
                 new PositionGoal(new XY(8, 4)),
                 squareAndDiagonal, new DiagonalHeuristic());
 
-        AStar solver = new AStar(w);
+        AStar<XY> solver = new AStar<>(w);
         solver.run();
 
-        AStar solver2 = new AStar(w2);
+        AStar<XY> solver2 = new AStar<>(w2);
         solver2.run();
 
         System.out.println("done.");

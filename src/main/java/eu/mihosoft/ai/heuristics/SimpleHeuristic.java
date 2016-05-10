@@ -37,17 +37,17 @@ public final class SimpleHeuristic<T> implements Heuristic<T> {
     @Override
     public double estimate(State<T> s, Condition<T> goal, WorldDescription<T> w) {
         distance = 0;
-        State sOld = (State) s.clone();
-        State sNew = (State) s.clone();
+        State<T> sOld = (State<T>) s.clone();
+        State<T> sNew = (State<T>) s.clone();
 
         while (!w.getGoal().verify(sNew)) {
             distance++;
 
-            for (Action a : w.getActionSet()) {
+            for (Action<T> a : w.getActionSet()) {
                 boolean b = a.perform(sOld, sNew);
             }
 
-            sOld = (State) sNew.clone();
+            sOld = (State<T>) sNew.clone();
         }
 
         return distance;

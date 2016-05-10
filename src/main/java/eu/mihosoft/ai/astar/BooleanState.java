@@ -16,7 +16,7 @@ import java.util.Objects;
 public class BooleanState implements State<Boolean> {
     private String actionName;
     private final List<Boolean> internalState;
-    private Action action;
+    private Action<Boolean> action;
     
     /**
      * Creates an instance of State.
@@ -74,7 +74,7 @@ public class BooleanState implements State<Boolean> {
     }
 
     @Override
-    public State clone() {
+    public State<Boolean> clone() {
         BooleanState newState = new BooleanState(size());
         
         newState.internalState.clear();

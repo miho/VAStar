@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class TreeNode<T> extends ArrayList<TreeNode<T>> {
 
     private final State<T> state;
-    public int ID;
     private final double heuristic;
     private int distanceToRoot;
     private double costs;
@@ -38,7 +37,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      * the goal.
      */
     public TreeNode(State<T> s, double heuristic) {
-        this.state = (State) s.clone();
+        this.state = (State<T>) s.clone();
         this.heuristic = heuristic;
         this.costs = 0;
         this.distanceToRoot = 0;
@@ -164,9 +163,9 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      * Initializes leaf array if it is not initialized already. This will be
      * done for root node only.
      */
-    public final void initLeafes() {
+    private void initLeafes() {
         if ((leafes == null) && (parent == null)) {
-            leafes = new ArrayList<TreeNode<T>>();
+            leafes = new ArrayList<>();
             leafes.add(this);
         }
     }

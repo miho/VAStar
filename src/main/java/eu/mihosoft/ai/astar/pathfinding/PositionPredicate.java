@@ -16,6 +16,7 @@ import eu.mihosoft.ai.astar.State;
 public class PositionPredicate implements ConditionPredicate<XY>, EffectPredicate<XY> {
 
     private final XY pos;
+    private static final double TOL = 0.0001;
 
     public PositionPredicate(XY pos) {
         this.pos = new XY(pos);
@@ -24,8 +25,8 @@ public class PositionPredicate implements ConditionPredicate<XY>, EffectPredicat
     @Override
     public boolean verify(State<XY> s) {
 
-        boolean result = Math.abs(pos.x - s.get(0).x) < 0.0001
-                && Math.abs(pos.y - s.get(0).y) < 0.0001;
+        boolean result = Math.abs(pos.x - s.get(0).x) < TOL
+                && Math.abs(pos.y - s.get(0).y) < TOL;
 
         return result;
     }

@@ -9,6 +9,7 @@
 package eu.mihosoft.ai.astar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class provides everything the a* solver needs to know about a problem
@@ -23,7 +24,7 @@ public class WorldDescription<T> {
     private State<T> initialState;
 //    private State<T> finalState;
     private Condition<T> goal;
-    private ArrayList<Action> actionSet;
+    private List<Action<T>> actionSet;
 //    private ArrayList<Predicate> predicateSet;
 
     /**
@@ -35,7 +36,7 @@ public class WorldDescription<T> {
      * possible parameter combinations)
      * @param heuristic The heuristic that is to be used.
      */
-    public WorldDescription(State<T> initialState, Condition<T> goal, ArrayList<Action> actionSet, Heuristic<T> heuristic) {
+    public WorldDescription(State<T> initialState, Condition<T> goal, List<Action<T>> actionSet, Heuristic<T> heuristic) {
         this.heuristic = heuristic;
 
         this.initialState = initialState.clone();
@@ -85,7 +86,7 @@ public class WorldDescription<T> {
      *
      * @return
      */
-    public ArrayList<Action> getActionSet() {
+    public List<Action<T>> getActionSet() {
         return actionSet;
     }
 

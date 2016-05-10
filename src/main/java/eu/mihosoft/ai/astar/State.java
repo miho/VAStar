@@ -9,13 +9,9 @@
 
 package eu.mihosoft.ai.astar;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 /**
  * This class represents a state of the planning domain. It mostly just
- * a list of booleans.
+ * a list of state values (double, boolean, object).
  * @author miho
  * @param <T>
  */
