@@ -84,11 +84,6 @@ public class PathfindingTest {
         GoInDirAction up = new GoInDirAction(new XY(0, -1), "up", obstacles, costs);
         GoInDirAction down = new GoInDirAction(new XY(0, 1), "down", obstacles, costs);
 
-        GoInDirAction upLeft = new GoInDirAction(new XY(-1, -1), "up-left", obstacles, costs);
-        GoInDirAction upRight = new GoInDirAction(new XY(1, -1), "up-right", obstacles, costs);
-        GoInDirAction rightDown = new GoInDirAction(new XY(1, 1), "down-right", obstacles, costs);
-        GoInDirAction leftDown = new GoInDirAction(new XY(-1, 1), "down-left", obstacles, costs);
-
         ArrayList<Action<XY>> squareActions = new ArrayList<>();
 
         squareActions.add(left);
@@ -136,12 +131,12 @@ public class PathfindingTest {
         squareAndDiagonal.add(rightDown);
         squareAndDiagonal.add(leftDown);
 
-        WorldDescription<XY> w2 = new WorldDescription<>(
+        WorldDescription<XY> w = new WorldDescription<>(
                 new XYState(new XY(0, 1)),
                 new PositionGoal(new XY(8, 4)),
                 squareAndDiagonal, new DiagonalHeuristic());
 
-        return w2;
+        return w;
     }
 
     private void createTest(String expected, WorldDescription<XY> w) {
