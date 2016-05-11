@@ -44,6 +44,8 @@ public class PathfindingTest {
 
     private final List<XY> obstacles;
     private final Map<XY, Double> costs;
+    private ArrayList<Action<XY>> squareActions;
+    private ArrayList<Action<XY>> squareAndDiagonal;
 
     public PathfindingTest() {
         obstacles = new ArrayList<>();
@@ -75,38 +77,7 @@ public class PathfindingTest {
         obstacles.add(new XY(5, 4));
         obstacles.add(new XY(5, 5));
         obstacles.add(new XY(5, 6));
-
-    }
-
-    public WorldDescription<XY> createManhattanWorldDescription() {
-        GoInDirAction left = new GoInDirAction(new XY(-1, 0), "left", obstacles, costs);
-        GoInDirAction right = new GoInDirAction(new XY(1, 0), "right", obstacles, costs);
-        GoInDirAction up = new GoInDirAction(new XY(0, -1), "up", obstacles, costs);
-        GoInDirAction down = new GoInDirAction(new XY(0, 1), "down", obstacles, costs);
-
-        ArrayList<Action<XY>> squareActions = new ArrayList<>();
-
-        squareActions.add(left);
-        squareActions.add(right);
-        squareActions.add(up);
-        squareActions.add(down);
-
-        ArrayList<Action<XY>> squareAndDiagonal = new ArrayList<>(squareActions);
-
-        squareAndDiagonal.add(upLeft);
-        squareAndDiagonal.add(upRight);
-        squareAndDiagonal.add(rightDown);
-        squareAndDiagonal.add(leftDown);
-
-        WorldDescription<XY> w = new WorldDescription<>(
-                new XYState(new XY(0, 1)),
-                new PositionGoal(new XY(8, 4)),
-                squareActions, new ManhattanHeuristic());
-
-        return w;
-    }
-
-    public WorldDescription<XY> createDiagonalWorldDescription() {
+        
         GoInDirAction left = new GoInDirAction(new XY(-1, 0), "left", obstacles, costs);
         GoInDirAction right = new GoInDirAction(new XY(1, 0), "right", obstacles, costs);
         GoInDirAction up = new GoInDirAction(new XY(0, -1), "up", obstacles, costs);
@@ -117,19 +88,33 @@ public class PathfindingTest {
         GoInDirAction rightDown = new GoInDirAction(new XY(1, 1), "down-right", obstacles, costs);
         GoInDirAction leftDown = new GoInDirAction(new XY(-1, 1), "down-left", obstacles, costs);
 
-        ArrayList<Action<XY>> squareActions = new ArrayList<>();
+        squareActions = new ArrayList<>();
 
         squareActions.add(left);
         squareActions.add(right);
         squareActions.add(up);
         squareActions.add(down);
 
-        ArrayList<Action<XY>> squareAndDiagonal = new ArrayList<>(squareActions);
+        squareAndDiagonal = new ArrayList<>(squareActions);
 
         squareAndDiagonal.add(upLeft);
         squareAndDiagonal.add(upRight);
         squareAndDiagonal.add(rightDown);
         squareAndDiagonal.add(leftDown);
+
+    }
+
+    public WorldDescription<XY> createManhattanWorldDescription() {
+
+        WorldDescription<XY> w = new WorldDescription<>(
+                new XYState(new XY(0, 1)),
+                new PositionGoal(new XY(8, 4)),
+                squareActions, new ManhattanHeuristic());
+
+        return w;
+    }
+
+    public WorldDescription<XY> createDiagonalWorldDescription() {
 
         WorldDescription<XY> w = new WorldDescription<>(
                 new XYState(new XY(0, 1)),
