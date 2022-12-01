@@ -52,7 +52,7 @@ public class DiagonalHeuristic implements Heuristic<XY> {
         XY pos = s.get(0);
 
         if (!(goal instanceof PositionGoal)) {
-            return (int) Double.MAX_VALUE;
+            return Double.MAX_VALUE;
         }
 
         XY goalPos = ((PositionGoal) goal).getPos();

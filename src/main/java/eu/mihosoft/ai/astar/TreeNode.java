@@ -54,7 +54,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
 
     private TreeNode<T> parent;
 
-    private ArrayList<TreeNode<T>> leafes;
+    private ArrayList<TreeNode<T>> leafs;
 
     /**
      * Creates a new instance of TreeNode.
@@ -82,7 +82,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      */
     @Override
     public boolean add(TreeNode<T> t) {
-        t.leafes = this.leafes;
+        t.leafs = this.leafs;
         t.costs = this.getCosts() + t.getState().getAction().getCosts(t.getState());
         t.distanceToRoot = this.getDistanceToRoot()+1;
         t.sum = t.costs + t.heuristic;
@@ -90,9 +90,9 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
 
         boolean b = super.add(t);
 
-        for (int i = 0; i < leafes.size(); i++) {
-            if (leafes.get(i) == this) {
-                leafes.remove(i);
+        for (int i = 0; i < leafs.size(); i++) {
+            if (leafs.get(i) == this) {
+                leafs.remove(i);
             }
         }
 
@@ -101,7 +101,7 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
 
     /**
      * Each TreeNode that has been added and that is a leaf - one could also add
-     * a subtree - will be added to an array of leafes. If a leaf with equal
+     * a subtree - will be added to an array of leafs. If a leaf with equal
      * state exists already, the one with lower costs is used. The other one
      * will be removed.
      *
@@ -114,10 +114,11 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
         boolean equalStateExists = false;
         TreeNode tmpNode = null;
 
-        for (TreeNode<T> i : leafes) {
+        for (TreeNode<T> i : leafs) {
             if (i.getState().equals(t.getState())) {
                 equalStateExists = true;
                 tmpNode = i;
+                break;
             }
         }
 
@@ -125,17 +126,17 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
             boolean tIsBetter = tmpNode.getCosts() > t.getCosts();
 
             if (tIsBetter) {
-                leafes.add(t);
+                leafs.add(t);
 
                 if (tmpNode.getParent() != null) {
                     TreeNode tmpParent = tmpNode.getParent();
                     tmpParent.remove(tmpNode);
                 }
 
-                leafes.remove(tmpNode);
+                leafs.remove(tmpNode);
             }
         } else {
-            leafes.add(t);
+            leafs.add(t);
             return super.add(t);
         }
 
@@ -191,17 +192,17 @@ public class TreeNode<T> extends ArrayList<TreeNode<T>> {
      * done for root node only.
      */
     private void initLeafes() {
-        if ((leafes == null) && (parent == null)) {
-            leafes = new ArrayList<>();
-            leafes.add(this);
+        if ((leafs == null) && (parent == null)) {
+            leafs = new ArrayList<>();
+            leafs.add(this);
         }
     }
 
     /**
      * Returns a reference on the leaf list.
      */
-    public ArrayList<TreeNode<T>> getLeafes() {
-        return leafes;
+    public ArrayList<TreeNode<T>> getLeafs() {
+        return leafs;
     }
 
     /**

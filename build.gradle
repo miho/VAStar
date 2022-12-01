@@ -13,24 +13,30 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'net.nemerosa.versioning' version '1.7.1'
-    id 'com.jfrog.bintray' version '1.6'
     id "com.github.hierynomus.license" version "0.12.1"
 }
 
-task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper to the current directory.') {
-    gradleVersion = '2.13'
+wrapper {
+    gradleVersion = '7.5.1'
 }
 
-sourceCompatibility = '1.8'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+[compileJava, compileTestJava]*.options*.release = 17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint:unchecked']
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.encoding = 'UTF-8'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
 }
 
 license {
@@ -42,7 +48,7 @@ license {
         groovy = 'SLASHSTAR_STYLE'
         fxml   = 'XML_STYLE'
     }
-    ext.year   = '2007-2016'
+    ext.year   = '2007-2022'
     ext.author = 'Michael Hoffer <info@michaelhoffer.de>'
 }
 
@@ -90,7 +96,9 @@ jar {
     
         attributes(
           'Built-By': System.properties['user.name'],
-          'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+          'Created-By': System.properties['java.version'] 
+            + " (" + System.properties['java.vendor']
+            + " " + System.properties['java.vm.version'] + ")",
           'Build-Date': project.buildDate,
           'Build-Time': project.buildTime,
           'Build-Revision': versioning.info.commit,
@@ -107,7 +115,7 @@ def pomConfig = {
     name 'vastar'
     description 'Generic A-Star Implementation. Supports custom problem domains.'
     url 'https://github.com/miho/VAStar'
-    inceptionYear '2016'
+    inceptionYear '2007'
     licenses {
         license([:]) {
             name 'BSD 2-Clause'
@@ -142,26 +150,5 @@ publishing {
                 root.children().last() + pomConfig
             }
         }
-    }
-}
-
-if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
-if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
-
-bintray {
-    user = project.bintrayUsername
-    key = project.bintrayApiKey
-    publications = ['mavenCustom']
-    pkg {
-        repo                  = 'VAStar'
-        userOrg               = 'miho'
-        name                  = project.name
-        desc                  = 'Generic A-Star Implementation. Supports custom problem domains.'
-        licenses              = ['BSD 2-Clause']
-        labels                = ['ai', 'java',  'a-star']
-        websiteUrl            = 'https://github.com/miho/VAStar'
-        issueTrackerUrl       = 'https://github.com/miho/VAStar/issues'
-        vcsUrl                = 'git@github.com:miho/VAStar.git'
-        publicDownloadNumbers = true
     }
 }

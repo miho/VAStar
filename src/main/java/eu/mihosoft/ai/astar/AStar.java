@@ -36,7 +36,6 @@
 package eu.mihosoft.ai.astar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The AStar class contains an implementation of the well known A* algorithm. It
@@ -81,42 +80,27 @@ public class AStar<T> {
         
         System.out.println(">> Running:");
         System.out.println("");
-//        boolean foundSolution = false;
-        int counter = 0;
+
         int maxDepth = 0;
-
-        TreeNode<T> bestNode = null;
-        double heuristic = root.getHeuristic();
-//        double minHeuristic = heuristic;
-
+        double heuristic ;
         boolean accepted = false;
 
-//        HelpfulActions actionFilter = new HelpfulActions(w.getInitialState (),w);
         if (!w.getGoal().verify(w.getInitialState())) {
             TreeNode<T> t = root;
 
-            while (!accepted) {
-                counter++;
+            // while not accepted and not empty list do ...
+            while (!accepted && !w.getActionSet().isEmpty()) {
 
                 t = getLeafWithLowestSum(root);
 
-//                System.out.println("min: " + t.getState() + ", h: " + t.getHeuristic());
                 for (Action<T> a : w.getActionSet()) {
 
                     State<T> sNew = t.getState().clone();
-
                     boolean performable = a.perform(sNew, sNew);
 
-//                    System.out.println("s: " + sNew + ", performable: " + performable + ", a: " + a.getName());
-                    if (!performable) {
-//                        System.out.println(" --> rejecting s: " + sNew + ", h: " + heuristic + ", a: " + a.getName());
-                    }
-                    if (performable) //                    if (actionFilter.verifyAction (sNew,a))
-                    {
+                    if (performable) {
 
                         heuristic = w.getHeuristic().estimate(sNew, w.getGoal(), w);
-
-//                        System.out.println(" --> adding s: " + sNew + ", h: " + heuristic + ", a: " + a.getName());
                         t.add(new TreeNode<T>(sNew, heuristic));
 
                         if (t.getDistanceToRoot()> maxDepth) {
@@ -129,15 +113,6 @@ public class AStar<T> {
                         if (accepted) {
                             break;
                         }
-
-                        //Hill climbing
-//                        if (heuristic < minHeuristic)
-//                        {
-//                            minHeuristic = heuristic;
-//                            bestNode = t.get (t.size ()-1);
-//                            optimizeTree (bestNode);
-//                            System.out.println (">> has reached new min: " + minHeuristic);
-//                        }
                     }
                 }
             }
@@ -146,7 +121,6 @@ public class AStar<T> {
             t = t.get(t.size() - 1);
 
             solution = new Action[t.getDistanceToRoot()];
-            
 
             while (t.getParent() != null) {
                 for (int i = t.getDistanceToRoot() - 1; i >= 0; i--) {
@@ -155,7 +129,6 @@ public class AStar<T> {
                 }
             }
 
-
             System.out.println("");
             System.out.println(">> Solution found! ");
 
@@ -163,7 +136,7 @@ public class AStar<T> {
             System.out.println("------------------------------");
             System.out.println("[ number of actions: " + solution.length + " ]");
             System.out.println("[ number of nodes: " + t.getNodeCount() + " ]");
-            System.out.println("[ number of leafes: " + t.getLeafes().size() + " ]");
+            System.out.println("[ number of leafes: " + t.getLeafs().size() + " ]");
             System.out.println("------------------------------");
             System.out.println("");
 
@@ -187,17 +160,17 @@ public class AStar<T> {
     }
 
     /*
-     * Returnes Leaf with lowest sum (costs+heuristic).
+     * Returnes Leaf with the lowest sum (costs+heuristic).
      *
      * @param node any node of the tree, as we have
      *             access to leafes from any node of
      *             the tree.
      */
     private TreeNode<T> getLeafWithLowestSum(TreeNode<T> node) {
-        double sum = Integer.MAX_VALUE;
+        double sum = Double.MAX_VALUE;
         TreeNode<T> min = null;
 
-        for (TreeNode<T> t : node.getLeafes()) {
+        for (TreeNode<T> t : node.getLeafs()) {
             if (t.getSum() < sum) {
                 sum = t.getSum();
                 min = t;
@@ -214,7 +187,7 @@ public class AStar<T> {
     public void optimizeTree(TreeNode<T> t) {
         ArrayList<TreeNode<T>> delList = new ArrayList<>();
 
-        for (TreeNode<T> i : root.getLeafes()) {
+        for (TreeNode<T> i : root.getLeafs()) {
             if (i != t) {
                 delList.add(i);
             }
@@ -222,7 +195,7 @@ public class AStar<T> {
 
         for (TreeNode<T> i : delList) {
             i.getParent().remove(i);
-            root.getLeafes().remove(i);
+            root.getLeafs().remove(i);
         }
     }
 
