@@ -67,10 +67,10 @@ public final class SimpleHeuristic<T> implements Heuristic<T> {
         State<T> sOld = (State<T>) s.clone();
         State<T> sNew = (State<T>) s.clone();
 
-        while (!w.getGoal().verify(sNew)) {
+        while (!w.goal().verify(sNew)) {
             distance++;
 
-            for (Action<T> a : w.getActionSet()) {
+            for (Action<T> a : w.actionSet()) {
                 boolean b = a.perform(sOld, sNew);
             }
 

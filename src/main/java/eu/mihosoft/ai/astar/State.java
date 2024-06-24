@@ -37,48 +37,123 @@
 package eu.mihosoft.ai.astar;
 
 /**
- * This class represents a state of the planning domain. It mostly just
- * a list of state values (double, boolean, object).
+ * The State interface represents a state in the planning domain of a search problem,
+ * such as those solved by the A* algorithm. It encapsulates a collection of state
+ * values and provides methods to manipulate and query these values.
+ *
+ * <p>A State typically represents a specific configuration or situation in the
+ * problem space. It can be thought of as a node in the search graph.</p>
+ *
+ * <p>This interface allows for generic typing, enabling different types of state
+ * values to be used (e.g., Double, Boolean, custom objects) depending on the
+ * specific problem domain.</p>
+ *
+ * @param <T> the type of elements stored in this state
  * @author miho
- * @param <T>
  */
-public interface State<T>
-{
+public interface State<T> extends Cloneable {
 
-    public Action<T> getAction();
-    
-    public void setAction(Action<T> a);
-    
     /**
-     * Returns the name of the action that last changed the state.
-     * @return action name or {@code null} if no action has been applied 
+     * Retrieves the Action that was applied to reach this state.
+     *
+     * @return the Action that led to this state, or null if this is an initial state
      */
-    public String getActionName ();
-    
+    Action<T> getAction();
+
+    /**
+     * Sets the Action that was applied to reach this state.
+     *
+     * @param a the Action to associate with this state
+     */
+    void setAction(Action<T> a);
+
+    /**
+     * Retrieves the name of the action that last changed the state.
+     *
+     * @return the name of the last applied action, or null if no action has been applied
+     */
+    String getActionName();
+
     /**
      * Sets the name of the action that last changed the state.
      *
-     * @param actionName The name of the action.
+     * @param actionName the name of the action to associate with this state
      */
-    public void setActionName (String actionName);
-    
+    void setActionName(String actionName);
+
     /**
-     * Overloaded version of the equals method.
+     * Compares this state with another object for equality.
      *
-     * @param o the state thats equality is to be checked
-     * @return {@code true} if equal; {@code false} otherwise
+     * <p>Two states are considered equal if they have the same values in the same order.</p>
+     *
+     * @param o the object to compare with this state
+     * @return true if the states are equal, false otherwise
      */
     @Override
-    public boolean equals (Object o);
-    
-    public State<T> clone();
-    
-    public T set(int i, T value);
-    
-    public T get(int i);
-    
-    public int size();
-    
-    public State<T> newInstance(int n);
+    boolean equals(Object o);
 
+    /**
+     * Creates and returns a deep copy of this state.
+     *
+     * @return a new State object that is a deep copy of this state
+     */
+    State<T> clone();
+
+    /**
+     * Sets the value at the specified index in this state.
+     *
+     * @param i the index at which to set the value
+     * @param value the value to be stored at the specified index
+     * @return the previous value at the specified index, or null if there was no previous value
+     * @throws IndexOutOfBoundsException if the index is out of range (i < 0 || i >= size())
+     */
+    T set(int i, T value);
+
+    /**
+     * Retrieves the value at the specified index in this state.
+     *
+     * @param i the index of the value to retrieve
+     * @return the value at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range (i < 0 || i >= size())
+     */
+    T get(int i);
+
+    /**
+     * Returns the number of elements in this state.
+     *
+     * @return the number of elements in this state
+     */
+    int size();
+
+    /**
+     * Creates a new instance of a State with the specified initial capacity.
+     *
+     * <p>This method acts as a factory method for creating new State instances.</p>
+     *
+     * @param n the initial capacity of the new State
+     * @return a new State instance with the specified capacity
+     */
+    State<T> newInstance(int n);
+
+    /**
+     * Returns a string representation of the state.
+     *
+     * <p>This method should provide a human-readable representation of the state,
+     * which can be useful for debugging and logging purposes.</p>
+     *
+     * @return a string representation of the state
+     */
+    @Override
+    String toString();
+
+    /**
+     * Calculates a hash code for this state.
+     *
+     * <p>The hash code should be consistent with the equals method, such that
+     * if two states are equal according to equals(), they should have the same hash code.</p>
+     *
+     * @return a hash code value for this state
+     */
+    @Override
+    int hashCode();
 }

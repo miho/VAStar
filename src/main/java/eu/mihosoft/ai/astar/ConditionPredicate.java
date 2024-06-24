@@ -37,20 +37,50 @@
 package eu.mihosoft.ai.astar;
 
 /**
- * Condition interface. Has to be implemented from every predicate
- * that is interpreted as condition.
+ * The ConditionPredicate interface represents a predicate that can verify
+ * a condition on a given state. It is typically used to define goal conditions,
+ * constraints, preconditions for actions or other testable properties of states
+ * in a state-space search problem, such as in the A* algorithm.
+ *
+ * <p>Implementations of this interface should define how a condition is
+ * checked against a given state, returning true if the condition is met
+ * and false otherwise.</p>
+ *
+ * <p>In the context of the A* algorithm or similar search algorithms,
+ * ConditionPredicates might represent:
+ * <ul>
+ *   <li>Goal state conditions</li>
+ *   <li>Validity checks for states</li>
+ *   <li>Heuristic evaluations</li>
+ *   <li>Constraints that must be maintained during the search</li>
+ * </ul>
+ * </p>
+ *
+ * @param <T> the type of elements in the state
  * @author miho
  */
-public interface ConditionPredicate<T>
-{
+public interface ConditionPredicate<T> {
+
     /**
-     * Verifies if ConditionPredicates are true in State s.
-     * @param s State
+     * Verifies if the condition is true for the given state.
+     *
+     * <p>This method should check whether the condition represented by this
+     * predicate holds true for the given state. The exact nature of the
+     * condition depends on the specific implementation and problem domain.</p>
+     *
+     * @param s the state to be verified
+     * @return {@code true} if the condition is met, {@code false} otherwise
      */
-    public boolean verify(State<T> s);
-    
+    boolean verify(State<T> s);
+
     /**
-     * Returnes the name of the predicate as String.
+     * Returns the name of the condition predicate.
+     *
+     * <p>This method should return a human-readable name or description
+     * of the condition. This can be useful for debugging, logging, or
+     * presenting information about the search process to users.</p>
+     *
+     * @return a String representing the name of the condition predicate
      */
-    public String getName();
+    String getName();
 }

@@ -37,24 +37,46 @@
 package eu.mihosoft.ai.astar;
 
 /**
- * Effect interface. Has to be implemented from every predicate
- * that is interpreted as effect.
+ * The EffectPredicate interface represents a predicate that can modify a state.
+ * It is typically used to define effects of an action that can be applied to a state
+ * in a state-space search problem, such as in the A* algorithm.
+ *
+ * <p>Implementations of this interface should define how an effect is applied
+ * to a given state, potentially changing its properties or contents.</p>
+ *
+ * <p>In the context of the A* algorithm or similar search algorithms, EffectPredicates
+ * might represent:
+ * <ul>
+ *   <li>Actions that can be taken in a given state</li>
+ *   <li>State transitions in a planning problem</li>
+ *   <li>Effects of decisions in a decision-making process</li>
+ * </ul>
+ * </p>
+ *
+ * @param <T> the type of elements in the state
  * @author miho
  */
-public interface EffectPredicate<T>
-{   
-     
+public interface EffectPredicate<T> {
+
     /**
-     * Applies predicate/effect to State s.
+     * Applies the effect to the given state.
      *
-     * @param s State
+     * <p>This method should modify the state according to the effect this
+     * predicate represents. The exact nature of the modification depends
+     * on the specific implementation and problem domain.</p>
+     *
+     * @param s the state to which the effect should be applied
      */
-     public void apply(State<T> s);
-     
-    
+    void apply(State<T> s);
+
     /**
-     * Returnes the name of the predicate as String.
-     * @return 
+     * Returns the name of the effect predicate.
+     *
+     * <p>This method should return a human-readable name or description
+     * of the effect. This can be useful for debugging, logging, or
+     * presenting information about the search process to users.</p>
+     *
+     * @return a String representing the name of the effect predicate
      */
-    public String getName();
+    String getName();
 }

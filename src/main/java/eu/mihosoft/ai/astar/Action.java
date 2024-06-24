@@ -36,8 +36,8 @@
 package eu.mihosoft.ai.astar;
 
 /**
- * An Action consists of precondition and effects. These are predicates that can
- * be verified or applied to a state. The action class does combine these two.
+ * An Action consists of preconditions and effects. These are predicates that can
+ * be verified or be applied to a state. The action class does combine these two.
  * It can perform an action to a given state s.
  *
  * @author miho
@@ -47,7 +47,6 @@ public class Action<T> {
     private String name;
     public Condition<T> precond;
     public Effect<T> effect;
-    private final double costs = 1.0;
 
     /**
      * Creates a new instance of Action
@@ -142,7 +141,7 @@ public class Action<T> {
 //    }
 
     /**
-     * Returnes the String description of the action. (nice for screen output)
+     * Returns the String description of the action. (nice for screen output)
      */
     public String getName() {
         return name;
@@ -156,7 +155,7 @@ public class Action<T> {
     }
     
     public double getCosts(State<T> s) {
-        return costs;
+        return 1.0;
     }
 
 }
